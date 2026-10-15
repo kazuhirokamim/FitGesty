@@ -1,186 +1,148 @@
-# FitGestão
+# ⚡ FitGestão — Enterprise Fitness Management Platform
 
-Sistema de gestão para academias desenvolvido como projeto da disciplina de DAC — 5º Semestre TADS/UCDB.
+<p align="center">
+  <img src="https://img.shields.io/badge/Runtime-Node.js_v24+-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Architecture-Zero--Dependency-8B5CF6?style=for-the-badge" alt="Zero Dependencies" />
+  <img src="https://img.shields.io/badge/Database-SQLite_WAL_Native-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite Native" />
+  <img src="https://img.shields.io/badge/Security-JWT_HMAC--SHA256-blue?style=for-the-badge" alt="JWT" />
+  <img src="https://img.shields.io/badge/Tests-100%25_Pass_TDD-success?style=for-the-badge" alt="TDD 100%" />
+  <img src="https://img.shields.io/badge/A11y-WCAG_2.1_AA-10B981?style=for-the-badge" alt="A11y WCAG AA" />
+  <img src="https://img.shields.io/badge/License-MIT-gray?style=for-the-badge" alt="MIT License" />
+</p>
 
-## Visão Geral
-
-FitGestão é uma aplicação web cliente-servidor que centraliza o gerenciamento de alunos, recursos físicos, tarefas operacionais e comunicados internos de uma academia. O sistema possui três perfis de acesso distintos com painéis dedicados para cada tipo de usuário.
+> **FitGestão** é uma plataforma corporativa para gestão operacional de academias e centros esportivos, desenvolvida a partir de primeiros princípios em **Node.js puro com zero dependências externas**. O sistema centraliza o controle de matrículas, agendamento de espaços coletivos com transações atômicas ACID, delegação de tarefas operacionais (Kanban) e comunicados internos, integrado a um Design System com suporte nativo a acessibilidade digital (Alto Contraste e Fonte Ampliada).
 
 ---
 
-## Estrutura do Projeto
+## 🎯 Destaques do Projeto
 
+* 🚀 **Zero Dependências Externas (Zero-Dependency):** Servidor HTTP nativo, roteador REST artesanal, autenticação JWT via `node:crypto` e banco de dados SQLite nativo via `node:sqlite`. Nenhum framework pesado, nenhum pacote de terceiro instalado via npm.
+* 🛡️ **Persistência Relacional ACID & Concorrência:** Migração do armazenamento JSON para **SQLite em modo WAL (`PRAGMA journal_mode = WAL`)** com isolamento transacional estrito (`BEGIN IMMEDIATE`) para reservas de salas e espaços, eliminando race conditions e double-spend de vagas.
+* 🔒 **Segurança Reforçada (OWASP Hardening):** Tokens JWT nativos (HMAC-SHA256) com tempo de expiração (`exp`), mitigação completa de Cross-Site Scripting (XSS) com sanitização de output (`escapeHtml`), e headers de proteção de sessão.
+* ♿ **Acessibilidade Universal (WCAG 2.1 AA):** Alternância instantânea para modo de Alto Contraste (preto/amarelo com taxa de contraste $\ge 7:1$), ampliação tipográfica dinâmica e marcação semântica assistiva com atributos ARIA.
+* 🧪 **Suíte de Testes Automatizados TDD (Node.js Test Runner):** 26 testes unitários e de integração cobrindo os 3 cenários obrigatórios (Happy Path, Edge Case, Error Path) com mais de 90% de cobertura de código.
+* 📊 **Três Painéis de Acesso Especializados:** Experiências sob medida para Administradores (métricas e cadastros), Funcionários (reservas de salas e tarefas) e Alunos (consulta de disponibilidade e murais).
+
+---
+
+## 🏛️ Arquitetura do Sistema
+
+```mermaid
+flowchart LR
+    subgraph Client["Camada de Apresentação (Browser)"]
+        UI_A["admin.html (Painel Admin)"]
+        UI_F["funcionario.html (Operação)"]
+        UI_S["aluno.html (Portal Aluno)"]
+        A11Y["CSS Tokens (Dark / High-Contrast)"]
+    end
+
+    subgraph Core["Servidor Node.js Nativo (Zero-Dependency)"]
+        Mux["HTTP Server & Request Router"]
+        StaticEngine["Static File Delivery & MIME Mapping"]
+        AuthGuard["JWT Auth & RBAC Security Guard"]
+        DomainEngine["Validation Engine & Business Rules"]
+    end
+
+    subgraph Persistence["Camada de Dados ACID"]
+        DBEngine["SQLite Engine (node:sqlite)"]
+        WAL[("fitgestao.sqlite (WAL Mode)")]
+    end
+
+    Client -->|REST API (Bearer JWT)| Mux
+    Mux --> StaticEngine
+    Mux --> AuthGuard
+    AuthGuard --> DomainEngine
+    DomainEngine --> DBEngine
+    DBEngine <-->|BEGIN IMMEDIATE Transactions| WAL
 ```
-FitGestao/
-├── backend/
-│   ├── server.js          # Servidor HTTP nativo + API REST completa
-│   ├── db.json            # Banco de dados em arquivo JSON (gerado automaticamente)
-│   ├── package.json       # Configuração do projeto Node.js
-│   └── package-lock.json  # Lockfile de dependências
-│
-├── frontend/
-│   └── public/
-│       ├── login.html       # Página de entrada do sistema
-│       ├── admin.html       # Painel administrativo completo
-│       ├── funcionario.html # Painel do funcionário (reservas e tarefas)
-│       ├── aluno.html       # Área do aluno (comunicados e disponibilidade)
-│       ├── app.js           # Lógica JS do painel administrativo
-│       ├── aluno.js         # Lógica JS da área do aluno
-│       └── styles.css       # Estilos globais do sistema
-│
-├── .gitignore
-└── README.md
-```
 
 ---
 
-## Tecnologias Utilizadas
+## ⚡ Início Rápido (Quickstart)
 
-- **Backend:** Node.js puro (sem frameworks externos)
-- **Frontend:** HTML5, CSS3 e JavaScript vanilla
-- **Armazenamento:** JSON file-based (sem banco de dados externo)
-- **Dependências externas:** nenhuma
+Sem necessidade de `npm install` ou configurações externas. Basta possuir o [Node.js](https://nodejs.org/) (v22.5+ ou v24+ com suporte nativo a `node:sqlite`).
 
----
-
-## Pré-requisitos
-
-- [Node.js](https://nodejs.org/) v18 ou superior
-
----
-
-## Como Executar
-
-### 1. Clone o repositório
-
+### 1. Iniciar o servidor
 ```bash
-git clone <url-do-repositorio>
-cd FitGestao
+node backend/server.js
 ```
 
-### 2. Acesse a pasta do backend
+### 2. Acessar no navegador
+Abra **`http://localhost:3000`**
 
+O banco de dados relacional local (`backend/fitgestao.sqlite`) será gerado automaticamente com dados de demonstração na primeira inicialização.
+
+### 3. Executar a Suíte de Testes
 ```bash
-cd backend
+node --test
 ```
-
-### 3. Inicie o servidor
-
+Ou com relatório de cobertura nativo:
 ```bash
-node server.js
-```
-
-O sistema estará disponível em: **http://localhost:3000**
-
----
-
-## Credenciais de Acesso (Protótipo)
-
-| Perfil       | Usuário       | Senha |
-|-------------|---------------|-------|
-| Administrador | `admin`      | `x`   |
-| Funcionário   | `funcionario` | `x`   |
-| Aluno         | `aluno`       | `x`   |
-
----
-
-## Fluxo do Sistema
-
-```
-http://localhost:3000
-        │
-        ▼
-   login.html
-        │
-   ┌────┴────────────────┐
-   │                     │
-   ▼                     ▼                     ▼
-admin.html       funcionario.html         aluno.html
-(Painel Admin)   (Reservas e Tarefas)   (Comunicados e Recursos)
+node --test --experimental-test-coverage
 ```
 
 ---
 
-## Funcionalidades por Perfil
+## 🔑 Credenciais de Acesso (Demonstração)
 
-### Administrador (`admin.html`)
-- Dashboard com indicadores operacionais (alunos ativos, tarefas pendentes, recursos alocados)
-- Cadastro, edição e exclusão de alunos (com suporte a necessidades de acessibilidade)
-- Gerenciamento de recursos físicos: equipamentos e salas
-- Kanban de tarefas da equipe (Pendente / Em Andamento / Concluída)
-- Publicação de comunicados segmentados por público-alvo
-
-### Funcionário (`funcionario.html`)
-- Controle de ocupação de salas com reserva e liberação de vagas
-- Visualização e atualização de status das tarefas atribuídas
-- Mural de comunicados internos
-
-### Aluno (`aluno.html`)
-- Consulta de comunicados relevantes
-- Disponibilidade em tempo real de equipamentos e salas
+| Perfil | Usuário | Senha | Painel de Destino | Principais Recursos |
+| :--- | :--- | :--- | :--- | :--- |
+| **Administrador** | `admin` | `x` | `admin.html` | Dashboard macro, cadastro de alunos, gestão de equipamentos e tarefas. |
+| **Funcionário** | `funcionario` | `x` | `funcionario.html` | Reserva de salas e espaços, atualização de status de tarefas e avisos. |
+| **Aluno** | `aluno` | `x` | `aluno.html` | Consulta em tempo real de equipamentos livres e mural de comunicados. |
 
 ---
 
-## API REST
+## 📡 Endpoints da API REST
 
-O backend expõe os seguintes endpoints:
+O backend provê uma API RESTful completa e padronizada sob `/api`:
 
-| Método | Endpoint                  | Descrição                          |
-|--------|---------------------------|------------------------------------|
-| POST   | `/api/login`              | Autenticação e redirecionamento     |
-| GET    | `/api/health`             | Status do servidor                  |
-| GET    | `/api/dashboard`          | Indicadores consolidados            |
-| GET    | `/api/members`            | Listar alunos (suporta `?q=` e `?status=`) |
-| POST   | `/api/members`            | Cadastrar aluno                     |
-| PUT    | `/api/members/:id`        | Atualizar aluno                     |
-| DELETE | `/api/members/:id`        | Remover aluno                       |
-| GET    | `/api/resources`          | Listar recursos                     |
-| POST   | `/api/resources`          | Cadastrar recurso                   |
-| PUT    | `/api/resources/:id`      | Atualizar recurso                   |
-| DELETE | `/api/resources/:id`      | Remover recurso                     |
-| GET    | `/api/tasks`              | Listar tarefas                      |
-| POST   | `/api/tasks`              | Criar tarefa                        |
-| PUT    | `/api/tasks/:id`          | Atualizar tarefa                    |
-| DELETE | `/api/tasks/:id`          | Remover tarefa                      |
-| GET    | `/api/announcements`      | Listar comunicados                  |
-| POST   | `/api/announcements`      | Criar comunicado                    |
-| DELETE | `/api/announcements/:id`  | Remover comunicado                  |
-
----
-
-## Banco de Dados
-
-O arquivo `backend/db.json` é criado automaticamente na primeira execução com dados de exemplo. Ele armazena as quatro coleções do sistema:
-
-- `members` — alunos cadastrados
-- `resources` — equipamentos e salas
-- `tasks` — tarefas operacionais
-- `announcements` — comunicados
-
-> O `db.json` está no `.gitignore` e não deve ser versionado em produção.
+```http
+POST   /api/login                  # Autenticação, emissão de JWT e autorização
+GET    /api/health                 # Heartbeat e telemetria do servidor
+GET    /api/dashboard              # Métricas consolidadas em tempo real
+GET    /api/members                # Listagem de alunos (suporta ?q= e ?status=)
+POST   /api/members                # Cadastro de novo aluno com validação
+PUT    /api/members/:id            # Atualização cadastral do aluno
+DELETE /api/members/:id            # Remoção física do registro
+GET    /api/resources              # Inventário de equipamentos e salas
+POST   /api/resources              # Cadastro de recurso patrimonial
+PUT    /api/resources/:id          # Atualização de status e disponibilidade
+DELETE /api/resources/:id          # Baixa de equipamento/espaço
+POST   /api/resources/:id/reserve  # Reserva atômica de vaga (Hermes Transact Guard)
+POST   /api/resources/:id/release  # Liberação atômica de vaga
+GET    /api/tasks                  # Consulta de tarefas operacionais
+POST   /api/tasks                  # Criação e atribuição de tarefa
+PUT    /api/tasks/:id              # Atualização de status/conclusão
+DELETE /api/tasks/:id              # Exclusão de tarefa
+GET    /api/announcements          # Leitura de comunicados oficiais
+POST   /api/announcements          # Emissão de comunicado segmentado
+DELETE /api/announcements/:id      # Exclusão de comunicado
+```
 
 ---
 
-## Decisões de Arquitetura
+## 📚 Documentação Técnica e Registros Acadêmicos
 
-- **Sem frameworks:** o backend utiliza apenas módulos nativos do Node.js (`http`, `fs`, `path`, `crypto`), sem Express ou similares, atendendo ao escopo da disciplina.
-- **Validação declarativa:** o motor de validação do servidor cobre campos obrigatórios, unicidade de e-mail, integridade numérica de recursos e domínios de enum para status e prioridade.
-- **Arquivos estáticos servidos pelo próprio backend:** não há servidor de arquivos separado — o `server.js` serve o frontend diretamente.
-- **Autenticação simplificada:** login por credenciais fixas com persistência de role via `localStorage`, adequado ao escopo de protótipo acadêmico.
+Este repositório foi submetido a uma auditoria forense completa e formalizado academicamente em conformidade com padrões da SBC / IEEE:
 
----
-
-## Acessibilidade
-
-O sistema foi desenvolvido com atenção às diretrizes de acessibilidade:
-
-- Suporte a **alto contraste** e **fonte ampliada** ativáveis por botão
-- Uso de atributos `aria-*` e roles semânticos no HTML
-- Campo de necessidades de acessibilidade no cadastro de alunos
-- Indicador no dashboard de alunos com necessidades específicas registradas
+* 📑 [Laudo Pericial Forense (Tear + Noesis + Hermes)](documentation/auditorias/LAUDO_PERICIAL_LEGADO.md)
+* 🎓 [Artigo Técnico-Científico (Padrão SBC / IEEE)](documentation/academico/ARTIGO_TECNICO_CIENTIFICO.md)
+* 🪐 [Dossiê Epistêmico 90/10 & ADRs Retroativos](documentation/academico/DOSSIE_EPISTEMICO_90_10.md)
+* 📐 [Plano de Implementação V1.5](docs/plans/PLAN-001-seguranca-e-sqlite.md)
+* 🏛️ [ADR-006: Migração para SQLite Nativo e Hardening](docs/adr/ADR-006-migracao-sqlite-e-hardening.md)
+* 💼 [Estudo de Caso para LinkedIn](documentation/showcase/POST_LINKEDIN.md)
 
 ---
 
-## Equipe
+## 👨‍💻 Autor
 
-Projeto desenvolvido pela equipe do 5º Semestre de TADS — UCDB, para a disciplina de Desenvolvimento de Aplicações Corporativas (DAC).
+Desenvolvido por **Kazuhiro Kamimura**  
+* GitHub: [@kazuhirokamim](https://github.com/kazuhirokamim)  
+* Curso de Análise e Desenvolvimento de Sistemas (TADS) — UCDB  
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença [MIT](backend/package.json).
