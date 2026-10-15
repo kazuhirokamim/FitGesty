@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitGestão - Área do Aluno</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .sub-title-table { margin: 1.5rem 0 0.5rem 0; color: var(--primary-light); font-size: 1.2rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+  <header>
+    <div class="logo-fitgestao">
+  <h1><span>Fit</span>Gestão</h1>
+  <p><span>•</span> Área do Aluno <span>•</span></p>
+</div>
+    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+      <span class="user-badge">Acesso: Aluno</span>
+      <button id="contrastButton" type="button" aria-pressed="false" title="Alternar alto contraste" style="background:transparent;border:1px solid var(--border);color:var(--text);padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;font-weight:600;">◐ Contraste</button>
+      <button id="fontButton" type="button" aria-pressed="false" title="Alternar fonte maior" style="background:transparent;border:1px solid var(--border);color:var(--text);padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;font-weight:600;">A+ Fonte</button>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo-principal" tabindex="-1">
+    <section aria-labelledby="title-mural">
+      <h2 id="title-mural" class="section-title">Mural de Comunicados Importantes</h2>
+      <div id="muralContainer" class="grid-announcements"></div>
+    </section>
+
+    <section aria-labelledby="title-recursos">
+      <h2 id="title-recursos" class="section-title">Consulta de Disponibilidade em Tempo Real</h2>
+
+      <h3 class="sub-title-table"> Equipamentos de Musculação / Cardio</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Equipamento</th>
+              <th scope="col">Localização</th>
+              <th scope="col">Status de Uso</th>
+              <th scope="col">Unidades Livres Agora</th>
+            </tr>
+          </thead>
+          <tbody id="tableEquipmentsBody"></tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-title-table"> Salas e Espaços Coletivos</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Sala / Estúdio</th>
+              <th scope="col">Localização</th>
+              <th scope="col">Status Geral</th>
+              <th scope="col">Vagas Disponíveis</th>
+            </tr>
+          </thead>
+          <tbody id="tableSpacesBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const userRole = localStorage.getItem('fit_role');
+    if (userRole !== 'aluno') {
+      window.location.href = '/login.html';
+    }
+
+    const escapeHtml = (val = '') =>
+      String(val).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    function logout() {
+      localStorage.removeItem('fit_role');
+      localStorage.removeItem('fit_token');
+      window.location.href = '/login.html';
+    }
+
+    async function loadData() {
+      try {
+        const resAnn = await fetch('/api/announcements');
+        const announcements = await resAnn.json();
+        const mural = document.getElementById('muralContainer'); mural.innerHTML = '';
+        announcements.forEach(ann => {
+          if (ann.audience === 'Todos' || ann.audience === 'Alunos') {
+            mural.innerHTML += `<article class="card-announcement">
+              <h3>${escapeHtml(ann.title)}</h3>
+              <p>${escapeHtml(ann.message)}</p>
+            </article>`;
+          }
+        });
+
+        const resRec = await fetch('/api/resources');
+        const resources = await resRec.json();
+        const eqBody = document.getElementById('tableEquipmentsBody'); eqBody.innerHTML = '';
+        const spBody = document.getElementById('tableSpacesBody'); spBody.innerHTML = '';
+
+        resources.forEach(rec => {
+          const badgeClass = rec.available === 0 ? 'badge-danger' : 'badge-success';
+          const row = `<tr>
+            <td><strong>${escapeHtml(rec.name)}</strong></td>
+            <td>${escapeHtml(rec.location)}</td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(rec.condition)}</span></td>
+            <td><strong>${rec.available}</strong> disponíveis (de ${rec.quantity})</td>
+          </tr>`;
+          if (rec.category === 'Equipamento') {
+            eqBody.innerHTML += row;
+          } else {
+            spBody.innerHTML += row;
+          }
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    window.onload = loadData;
+
+    // ── Acessibilidade ──
+    const contrastBtn = document.querySelector('#contrastButton');
+    if (contrastBtn) {
+      contrastBtn.addEventListener('click', () => {
+        document.body.classList.toggle('high-contrast');
+        contrastBtn.setAttribute('aria-pressed', document.body.classList.contains('high-contrast'));
+      });
+    }
+    const fontBtn = document.querySelector('#fontButton');
+    if (fontBtn) {
+      fontBtn.addEventListener('click', () => {
+        document.body.classList.toggle('large-font');
+        fontBtn.setAttribute('aria-pressed', document.body.classList.contains('large-font'));
+      });
+    }
+  </script>
+</body>
+</html>

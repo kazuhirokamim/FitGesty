@@ -1,0 +1,21 @@
+# Dependências
+node_modules/
+
+# Banco de dados local (gerado em runtime)
+backend/db.json
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente
+.env

@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "id": "001",
+    "titulo": "Feature #001 — Hardening de Segurança, SQLite Nativo e Concorrência",
+    "repo": "kazuhirokamim/FitGestao",
+    "issue": 1,
+    "intro": "Definição de requisitos e decisões de arquitetura para a migração para SQLite nativo (node:sqlite) e hardening de segurança no FitGestão."
+  },
+  "blocos": [
+    {
+      "id": "A",
+      "titulo": "Persistência e Migração de Dados (SQLite)",
+      "sub": "Substituição do arquivo plano db.json pelo módulo nativo node:sqlite.",
+      "perguntas": [
+        {
+          "id": "A1",
+          "texto": "Como devemos tratar a migração dos dados legados do db.json?",
+          "tipo": "radio",
+          "opcoes": [
+            "Importar automaticamente registros de db.json para o SQLite no primeiro arranque (seed suave)",
+            "Recriar a base SQLite do zero apenas com o seed limpo de demonstração",
+            "Manter db.json como backup frio e criar fitgestao.sqlite como nova fonte primária"
+          ],
+          "dica": "Recomendamos importar os dados existentes para preservar os registros de teste da banca."
+        },
+        {
+          "id": "A2",
+          "texto": "Qual modo de Journaling do SQLite devemos configurar?",
+          "tipo": "radio",
+          "opcoes": [
+            "Modo WAL (Write-Ahead Logging) — concorrência máxima de leitura e escrita",
+            "Modo DELETE padrão síncrono"
+          ],
+          "dica": "WAL é o padrão do Tear para prevenir locks de concorrência e race conditions."
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "titulo": "Concorrência e Regra de Reserva de Vagas",
+      "sub": "Prevenção de double-spend na alocação de salas e equipamentos.",
+      "perguntas": [
+        {
+          "id": "B1",
+          "texto": "Como a API deve responder se duas requisições tentarem reservar a última vaga simultaneamente?",
+          "tipo": "radio",
+          "opcoes": [
+            "A primeira confirma (HTTP 200) e a segunda recebe HTTP 409 Conflict ('Não há vagas disponíveis')",
+            "Permitir sobre-reserva temporária com aviso visual no painel",
+            "Enfileirar a segunda requisição em lista de espera em memória"
+          ],
+          "dica": "HTTP 409 Conflict garante o axioma de conservação de vagas físicas da academia."
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "titulo": "Segurança, Sessões e Autenticação",
+      "sub": "Implementação de autenticação nativa sem pacotes do npm.",
+      "perguntas": [
+        {
+          "id": "C1",
+          "texto": "Qual formato de transporte do Token JWT nativo (HMAC-SHA256)?",
+          "tipo": "radio",
+          "opcoes": [
+            "Header Authorization: Bearer <token> gravado em sessionStorage/localStorage",
+            "Cookie HTTP-Only com flag SameSite=Strict",
+            "Ambos suportados (Header prioritário, Cookie como fallback)"
+          ],
+          "dica": "Header Authorization é o padrão mais simples para chamadas fetch REST no frontend vanilla."
+        },
+        {
+          "id": "C2",
+          "texto": "Qual o tempo de expiração recomendado para a sessão?",
+          "tipo": "radio",
+          "opcoes": [
+            "24 horas (ideal para expediente de trabalho em academia)",
+            "8 horas (um turno de trabalho)",
+            "30 dias (acesso prolongado)"
+          ]
+        }
+      ]
+    }
+  ]
+}

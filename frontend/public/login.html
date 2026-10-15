@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitGestão - Login</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 1rem;
+    }
+    .login-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .login-header h2 {
+      color: var(--primary);
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+    .login-header p {
+      color: var(--text-muted);
+    }
+    .alert-error {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+    }
+    .credentials-hint {
+      margin-top: 1.5rem;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+  <main class="login-container">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-header">
+        <div class="logo-fitgestao">
+  <h1><span>Fit</span>Gestão</h1>
+</div>
+        <p>Acesse o painel do sistema</p>
+      </div>
+
+      <div id="errorAlert" class="alert-error" role="alert" aria-live="assertive"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label id="lblUser" for="username">Usuário</label>
+          <input type="text" id="username" class="form-control" required autocomplete="username" aria-labelledby="lblUser">
+        </div>
+        <div class="form-group">
+          <label id="lblPass" for="password">Senha</label>
+          <input type="password" id="password" class="form-control" required autocomplete="current-password" aria-labelledby="lblPass">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+          Entrar no Sistema
+        </button>
+      </form>
+
+      <div class="credentials-hint">
+        <strong>Acessos para a Banca:</strong><br>
+        • Aluno: <code>aluno</code> / Senha: <code>x</code><br>
+        • Funcionário: <code>funcionario</code> / Senha: <code>x</code><br>
+        • Admin: <code>admin</code> / Senha: <code>x</code>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorAlert = document.getElementById('errorAlert');
+
+      errorAlert.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          localStorage.setItem('fit_role', data.role);
+          if (data.token) localStorage.setItem('fit_token', data.token);
+          window.location.href = data.redirect;
+        } else {
+          errorAlert.textContent = data.error || 'Erro ao realizar login.';
+          errorAlert.style.display = 'block';
+        }
+      } catch (err) {
+        errorAlert.textContent = 'Erro de rede ou servidor offline.';
+        errorAlert.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

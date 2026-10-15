@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitGestão - Painel do Funcionário</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    section { background: transparent !important; border: none !important; }
+    .reservas-card {
+      background: var(--panel) !important;
+      border: 1px solid var(--panel-border) !important;
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    .sub-title-table {
+      margin: 1.5rem 0 0.75rem 0;
+      color: var(--primary-light);
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sub-title-table::before {
+      content: '';
+      display: inline-block;
+      width: 3px; height: 1rem;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+  <header>
+    <div class="logo-fitgestao">
+  <h1><span>Fit</span>Gestão</h1>
+  <p><span>•</span> Área do funcionario <span>•</span></p>
+</div>
+    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+      <span class="user-badge"> Funcionário</span>
+      <button id="contrastButton" type="button" aria-pressed="false" title="Alternar alto contraste" style="background:transparent;border:1px solid var(--border);color:var(--text);padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;font-weight:600;">◐ Contraste</button>
+      <button id="fontButton" type="button" aria-pressed="false" title="Alternar fonte maior" style="background:transparent;border:1px solid var(--border);color:var(--text);padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;font-weight:600;">A+ Fonte</button>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo-principal" tabindex="-1">
+    <section aria-labelledby="title-reservas">
+      <div class="reservas-card">
+        <h2 id="title-reservas" class="section-title">Controle de Espaços e Reservas</h2>
+        <p class="sub-title-table">Controle de Ocupação de Salas</p>
+        <div class="table-container">
+          <table>
+            <caption style="color:var(--muted);font-size:0.82rem;text-align:left;padding:0.5rem 0 0.75rem;">Lista de salas disponíveis para alocação</caption>
+            <thead>
+              <tr>
+                <th scope="col">Sala / Espaço</th>
+                <th scope="col">Localização</th>
+                <th scope="col">Status Geral</th>
+                <th scope="col">Vagas Disponíveis</th>
+                <th scope="col" style="text-align: center;">Ação de Reserva</th>
+              </tr>
+            </thead>
+            <tbody id="spacesReservationBody">
+              <tr><td colspan="5" class="text-muted">Buscando salas cadastradas...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="title-tasks">
+      <h2 id="title-tasks" class="section-title">Minhas Atribuições e Tarefas</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Título da Tarefa</th>
+              <th scope="col">Responsável</th>
+              <th scope="col">Prioridade</th>
+              <th scope="col">Prazo Limite</th>
+              <th scope="col">Status Atual</th>
+              <th scope="col" style="text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tasksTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="title-mural">
+      <h2 id="title-mural" class="section-title">Informativos Internos / Mural</h2>
+      <div id="muralContainer" class="grid-announcements"></div>
+    </section>
+  </main>
+
+  <script>
+    const userRole = localStorage.getItem('fit_role');
+    if (userRole !== 'funcionario') {
+      window.location.href = '/login.html';
+    }
+
+    const escapeHtml = (val = '') =>
+      String(val).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    function logout() {
+      localStorage.removeItem('fit_role');
+      localStorage.removeItem('fit_token');
+      window.location.href = '/login.html';
+    }
+
+    async function reserveSpace(id) {
+      try {
+        const token = localStorage.getItem('fit_token');
+        const response = await fetch(`/api/resources/${id}/reserve`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          }
+        });
+        if (response.ok) {
+          loadData();
+        } else {
+          const data = await response.json();
+          alert(data.error || 'Não foi possível reservar a vaga.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+      }
+    }
+
+    async function releaseSpace(id) {
+      try {
+        const token = localStorage.getItem('fit_token');
+        const response = await fetch(`/api/resources/${id}/release`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          }
+        });
+        if (response.ok) {
+          loadData();
+        } else {
+          const data = await response.json();
+          alert(data.error || 'Não foi possível liberar a vaga.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+      }
+    }
+
+    async function toggleTaskStatus(id, currentStatus) {
+      const newStatus = currentStatus === 'Concluída' ? 'Pendente' : 'Concluída';
+      const token = localStorage.getItem('fit_token');
+      await fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      loadData();
+    }
+
+    async function loadData() {
+      try {
+        const resRec = await fetch('/api/resources');
+        const resources = await resRec.json();
+        const spacesBody = document.getElementById('spacesReservationBody');
+        spacesBody.innerHTML = '';
+        const spaces = resources.filter(r => r.category === 'Espaço' || r.category === 'Ambiente');
+        if (spaces.length === 0) {
+          spacesBody.innerHTML = '<tr><td colspan="5" class="text-muted">Nenhuma sala registrada pelo administrador.</td></tr>';
+        } else {
+          spaces.forEach(sp => {
+            spacesBody.innerHTML += `<tr>
+              <td><strong>${escapeHtml(sp.name)}</strong></td>
+              <td>${escapeHtml(sp.location)}</td>
+              <td><span class="badge ${sp.available === 0 ? 'badge-danger' : 'badge-success'}">${escapeHtml(sp.condition)}</span></td>
+              <td><strong>${sp.available}</strong> livres (Total: ${sp.quantity})</td>
+              <td style="text-align: center;">
+                <button class="btn btn-primary" style="padding:4px 10px; min-height:32px;" onclick="reserveSpace('${sp.id}')">📋 Reservar 1 Vaga</button>
+                <button class="btn btn-success" style="padding:4px 10px; min-height:32px;" onclick="releaseSpace('${sp.id}')">↩ Liberar Vaga</button>
+              </td>
+            </tr>`;
+          });
+        }
+
+        const resTasks = await fetch('/api/tasks');
+        const tasks = await resTasks.json();
+        const tasksBody = document.getElementById('tasksTableBody'); tasksBody.innerHTML = '';
+        if (tasks.length === 0) {
+          tasksBody.innerHTML = '<tr><td colspan="6" class="text-muted">Nenhuma tarefa atribuída.</td></tr>';
+        } else {
+          tasks.forEach(task => {
+            const isConcluida = task.status === 'Concluída';
+            tasksBody.innerHTML += `<tr>
+              <td><strong>${escapeHtml(task.title)}</strong></td>
+              <td>${escapeHtml(task.responsible)}</td>
+              <td><span class="badge badge-warning">${escapeHtml(task.priority)}</span></td>
+              <td>${escapeHtml(task.dueDate)}</td>
+              <td><span class="badge ${isConcluida ? 'badge-success' : 'badge-warning'}">${escapeHtml(task.status)}</span></td>
+              <td style="text-align: center;">
+                <button class="btn ${isConcluida ? 'btn-warning' : 'btn-success'}" onclick="toggleTaskStatus('${task.id}', '${task.status}')">
+                  ${isConcluida ? '↩ Marcar Pendente' : '✔ Concluir Task'}
+                </button>
+              </td>
+            </tr>`;
+          });
+        }
+
+        const resAnn = await fetch('/api/announcements');
+        const announcements = await resAnn.json();
+        const mural = document.getElementById('muralContainer'); mural.innerHTML = '';
+        const relevant = announcements.filter(ann => ann.audience === 'Todos' || ann.audience === 'Colaboradores');
+        if (relevant.length === 0) {
+          mural.innerHTML = '<p class="text-muted">Nenhum comunicado no momento.</p>';
+        } else {
+          relevant.forEach(ann => {
+            mural.innerHTML += `<article class="card-announcement">
+              <h3>${escapeHtml(ann.title)}</h3>
+              <p>${escapeHtml(ann.message)}</p>
+            </article>`;
+          });
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    window.onload = loadData;
+
+    // ── Acessibilidade ──
+    const contrastBtn = document.querySelector('#contrastButton');
+    if (contrastBtn) {
+      contrastBtn.addEventListener('click', () => {
+        document.body.classList.toggle('high-contrast');
+        contrastBtn.setAttribute('aria-pressed', document.body.classList.contains('high-contrast'));
+      });
+    }
+    const fontBtn = document.querySelector('#fontButton');
+    if (fontBtn) {
+      fontBtn.addEventListener('click', () => {
+        document.body.classList.toggle('large-font');
+        fontBtn.setAttribute('aria-pressed', document.body.classList.contains('large-font'));
+      });
+    }
+  </script>
+</body>
+</html>
