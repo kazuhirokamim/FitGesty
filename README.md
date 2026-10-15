@@ -1,4 +1,4 @@
-# ⚡ FitGestão — Enterprise Fitness Management Platform
+# ⚡ FitGesty — Enterprise Fitness Management Platform
 
 <p align="center">
   <img src="https://img.shields.io/badge/Runtime-Node.js_v24+-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
@@ -10,14 +10,14 @@
   <img src="https://img.shields.io/badge/License-MIT-gray?style=for-the-badge" alt="MIT License" />
 </p>
 
-> **FitGestão** é uma plataforma corporativa para gestão operacional de academias e centros esportivos, desenvolvida a partir de primeiros princípios em **Node.js puro com zero dependências externas**. O sistema centraliza o controle de matrículas, agendamento de espaços coletivos com transações atômicas ACID, delegação de tarefas operacionais (Kanban) e comunicados internos, integrado a um Design System com suporte nativo a acessibilidade digital (Alto Contraste e Fonte Ampliada).
+> **FitGesty** é uma plataforma corporativa para gestão operacional de academias e centros esportivos, desenvolvida a partir de primeiros princípios em **Node.js puro com zero dependências externas**. O sistema centraliza o controle de matrículas, agendamento de espaços coletivos com transações atômicas ACID, delegação de tarefas operacionais (Kanban) e comunicados internos, integrado a um Design System com suporte nativo a acessibilidade digital (Alto Contraste e Fonte Ampliada).
 
 ---
 
 ## 🎯 Destaques do Projeto
 
 * 🚀 **Zero Dependências Externas (Zero-Dependency):** Servidor HTTP nativo, roteador REST artesanal, autenticação JWT via `node:crypto` e banco de dados SQLite nativo via `node:sqlite`. Nenhum framework pesado, nenhum pacote de terceiro instalado via npm.
-* 🛡️ **Persistência Relacional ACID & Concorrência:** Migração do armazenamento JSON para **SQLite em modo WAL (`PRAGMA journal_mode = WAL`)** com isolamento transacional estrito (`BEGIN IMMEDIATE`) para reservas de salas e espaços, eliminando race conditions e double-spend de vagas.
+* 🛡️ **Persistência Relacional ACID & Concorrência:** Armazenamento em **SQLite em modo WAL (`PRAGMA journal_mode = WAL`)** com isolamento transacional estrito (`BEGIN IMMEDIATE`) para reservas de salas e espaços, eliminando race conditions e double-spend de vagas.
 * 🔒 **Segurança Reforçada (OWASP Hardening):** Tokens JWT nativos (HMAC-SHA256) com tempo de expiração (`exp`), mitigação completa de Cross-Site Scripting (XSS) com sanitização de output (`escapeHtml`), e headers de proteção de sessão.
 * ♿ **Acessibilidade Universal (WCAG 2.1 AA):** Alternância instantânea para modo de Alto Contraste (preto/amarelo com taxa de contraste $\ge 7:1$), ampliação tipográfica dinâmica e marcação semântica assistiva com atributos ARIA.
 * 🧪 **Suíte de Testes Automatizados TDD (Node.js Test Runner):** 26 testes unitários e de integração cobrindo os 3 cenários obrigatórios (Happy Path, Edge Case, Error Path) com mais de 90% de cobertura de código.
@@ -45,7 +45,7 @@ flowchart LR
 
     subgraph Persistence["Camada de Dados ACID"]
         DBEngine["SQLite Engine (node:sqlite)"]
-        WAL[("fitgestao.sqlite (WAL Mode)")]
+        WAL[("fitgesty.sqlite (WAL Mode)")]
     end
 
     Client -->|REST API (Bearer JWT)| Mux
@@ -70,7 +70,7 @@ node backend/server.js
 ### 2. Acessar no navegador
 Abra **`http://localhost:3000`**
 
-O banco de dados relacional local (`backend/fitgestao.sqlite`) será gerado automaticamente com dados de demonstração na primeira inicialização.
+O banco de dados relacional local (`backend/fitgesty.sqlite`) será gerado automaticamente com dados de demonstração na primeira inicialização.
 
 ### 3. Executar a Suíte de Testes
 ```bash
@@ -79,6 +79,11 @@ node --test
 Ou com relatório de cobertura nativo:
 ```bash
 node --test --experimental-test-coverage
+```
+
+### 4. Sincronização Diária no GitHub
+```bash
+npm run sync
 ```
 
 ---

@@ -1,13 +1,14 @@
 {
-  "name": "fitgestao-dac-backend",
+  "name": "fitgesty-dac-backend",
   "version": "1.0.0",
-  "description": "Backend do protótipo FitGestão - DAC 5º semestre TADS UCDB",
+  "description": "Backend do protótipo FitGesty - DAC 5º semestre TADS UCDB",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "sync": "bash ../scripts/sync.sh"
   },
   "keywords": ["dac", "ucdb", "tads", "backend", "api-rest"],
   "author": "Equipe DAC 5º Semestre",

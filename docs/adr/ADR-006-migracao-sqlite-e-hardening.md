@@ -12,11 +12,11 @@ tags: ["sqlite", "seguranca", "hardening", "transacoes"]
 
 ## Decisão
 
-No contexto de refatoração do backend FitGestão, enfrentando limitações de concorrência e integridade do arquivo db.json, decidimos por migrar a camada de dados para SQLite nativo (node:sqlite) e blindar o sistema, para alcançar isolamento transacional ACID e proteção contra XSS, aceitando a exigência do Node.js v22+ no ambiente.
+No contexto de refatoração do backend FitGesty, enfrentando limitações de concorrência e integridade do arquivo db.json, decidimos por migrar a camada de dados para SQLite nativo (node:sqlite) e blindar o sistema, para alcançar isolamento transacional ACID e proteção contra XSS, aceitando a exigência do Node.js v22+ no ambiente.
 
 ## Contexto e Forças
 
-O sistema FitGestão foi concebido como um protótipo com zero dependências externas, utilizando persistência em arquivo `db.json` com `fs.writeFileSync`. A auditoria forense identificou os seguintes riscos inegociáveis:
+O sistema FitGesty foi concebido como um protótipo com zero dependências externas, utilizando persistência em arquivo `db.json` com `fs.writeFileSync`. A auditoria forense identificou os seguintes riscos inegociáveis:
 1. Perda de dados em falhas de escrita ou falha síncrona.
 2. Race condition com sobre-reserva (*double allocation*) de salas e recursos.
 3. Vulnerabilidades de Stored XSS no frontend por concatenação via `.innerHTML +=`.

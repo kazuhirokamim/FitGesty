@@ -1,0 +1,23 @@
+{
+  "name": "fitgesty",
+  "version": "1.5.0",
+  "description": "FitGesty — Enterprise Fitness Management Platform (Zero-Dependency & SQLite Native)",
+  "main": "backend/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node --test",
+    "sync": "bash scripts/sync.sh"
+  },
+  "keywords": [
+    "fitness",
+    "management",
+    "zero-dependency",
+    "sqlite-wal",
+    "jwt",
+    "vanilla-js",
+    "a11y"
+  ],
+  "author": "Kazuhiro Kamimura",
+  "license": "MIT"
+}

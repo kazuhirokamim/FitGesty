@@ -1,5 +1,5 @@
 /*
-  FitGestão — app.js (Painel Administrativo / index.html)
+  FitGesty — app.js (Painel Administrativo / index.html)
   Corrigido: guards para null em todos os seletores, kanban funcional,
   split de recursos (equipamentos vs salas), filtro de alunos.
 */

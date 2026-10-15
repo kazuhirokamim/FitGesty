@@ -1,5 +1,5 @@
 # 🏛️ LAUDO PERICIAL FORENSE DE ENGENHARIA DE SOFTWARE
-## Sistema FitGestão — Análise Epistêmica, Arquitetural e Transacional
+## Sistema FitGesty — Análise Epistêmica, Arquitetural e Transacional
 
 **Data do Laudo:** Outubro de 2026  
 **Auditoria:** Tear v3.0 + Noesis Ouroboros v3.0 + Hermes Swarm  
@@ -12,7 +12,7 @@
 
 ## 📑 SUMÁRIO EXECUTIVO
 
-O presente Laudo Pericial documenta a auditoria forense irrestrita do sistema **FitGestão**, uma solução full-stack para gerenciamento operacional de academias e centros esportivos. O sistema foi construído a partir de primeiros princípios em **Node.js puro**, sem o emprego de frameworks de terceiros (como Express, Fastify ou NestJS) e sem bibliotecas de banco de dados (ORMs/ODMs), adotando uma arquitetura *Zero-External-Dependencies*.
+O presente Laudo Pericial documenta a auditoria forense irrestrita do sistema **FitGesty**, uma solução full-stack para gerenciamento operacional de academias e centros esportivos. O sistema foi construído a partir de primeiros princípios em **Node.js puro**, sem o emprego de frameworks de terceiros (como Express, Fastify ou NestJS) e sem bibliotecas de banco de dados (ORMs/ODMs), adotando uma arquitetura *Zero-External-Dependencies*.
 
 A auditoria comprova notável maturidade conceitual no aproveitamento das APIs nativas do Node.js (`http`, `fs`, `path`, `crypto`), entrega de uma interface gráfica polida com foco em acessibilidade (WCAG AA - Alto Contraste e Fonte Ampliada) e implementação de um CRUD RESTful completo com motor declarativo de validação de domínio. Simultaneamente, a investigação sob a lente adversarial (Tear + Noesis + Hermes) expõe limites inerentes à camada de persistência em arquivo plano síncrono (`fs.writeFileSync`), vulnerabilidades de Cross-Site Scripting (Stored XSS) no frontend dinâmico e ausência de barreira criptográfica na autenticação e controle de sessões.
 

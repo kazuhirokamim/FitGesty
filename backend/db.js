@@ -1,6 +1,6 @@
 /*
   =============================================================================
-  FitGestão — Módulo de Persistência SQLite Nativo (node:sqlite)
+  FitGesty — Módulo de Persistência SQLite Nativo (node:sqlite)
   Zero dependências externas, modo WAL ativo, transações ACID atômicas.
   =============================================================================
 */
@@ -10,7 +10,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 
-const DEFAULT_DB_PATH = path.join(__dirname, 'fitgestao.sqlite');
+const DEFAULT_DB_PATH = path.join(__dirname, 'fitgesty.sqlite');
 const LEGACY_JSON_PATH = path.join(__dirname, 'db.json');
 
 let dbInstance = null;

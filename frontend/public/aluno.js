@@ -1,5 +1,5 @@
 /*
-  FitGestão — aluno.js (Área do Aluno)
+  FitGesty — aluno.js (Área do Aluno)
   Corrigido: guards para null, campo condition correto, renderização robusta.
 */
 

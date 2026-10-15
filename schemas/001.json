@@ -2,9 +2,9 @@
   "meta": {
     "id": "001",
     "titulo": "Feature #001 — Hardening de Segurança, SQLite Nativo e Concorrência",
-    "repo": "kazuhirokamim/FitGestao",
+    "repo": "kazuhirokamim/FitGesty",
     "issue": 1,
-    "intro": "Definição de requisitos e decisões de arquitetura para a migração para SQLite nativo (node:sqlite) e hardening de segurança no FitGestão."
+    "intro": "Definição de requisitos e decisões de arquitetura para a migração para SQLite nativo (node:sqlite) e hardening de segurança no FitGesty."
   },
   "blocos": [
     {
@@ -19,7 +19,7 @@
           "opcoes": [
             "Importar automaticamente registros de db.json para o SQLite no primeiro arranque (seed suave)",
             "Recriar a base SQLite do zero apenas com o seed limpo de demonstração",
-            "Manter db.json como backup frio e criar fitgestao.sqlite como nova fonte primária"
+            "Manter db.json como backup frio e criar fitgesty.sqlite como nova fonte primária"
           ],
           "dica": "Recomendamos importar os dados existentes para preservar os registros de teste da banca."
         },

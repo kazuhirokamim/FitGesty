@@ -10,10 +10,10 @@ Quantos pacotes npm você realmente precisa para colocar uma aplicação corpora
 
 Recentemente decidi me desafiar em um projeto acadêmico de Desenvolvimento de Aplicações Corporativas (DAC) no 5º semestre de TADS na UCDB:
 
-Construir o FitGestão — um sistema completo de gestão para centros esportivos e academias — sem instalar uma única dependência externa.
+Construir o FitGesty — um sistema completo de gestão para centros esportivos e academias — sem instalar uma única dependência externa.
 
 Sem Express. Sem Fastify. Sem Prisma ou TypeORM. Sem Tailwind. Sem bundlers.
-Apenas Node.js nativo (v18+) e JavaScript puro no frontend.
+Apenas Node.js nativo (v24+) com SQLite nativo (WAL mode), JWT nativo e JavaScript puro no frontend.
 
 O resultado?
 
@@ -23,16 +23,16 @@ Implementei o parsing de streams de requisições com proteção explícita cont
 2. Acessibilidade Real no Core (WCAG 2.1 AA):
 Não adianta criar uma interface bonita se ela exclui usuários. Desenvolvi um Design System em CSS puro com tokens dinâmicos para alternância instantânea entre Dark Mode Cyber-Purple e modo de Alto Contraste (taxa de contraste superior a 7:1), além de escala tipográfica ampliada em 120% sem quebra de layout.
 
-3. Persistência Local-First:
-A aplicação roda de ponta a ponta a partir de um único comando: `node server.js`. O estado inicializa automaticamente sem exigir que quem for testar instale bancos pesados ou configure variáveis complexas.
+3. Persistência Relacional ACID & Concorrência:
+Migração de JSON plano para SQLite nativo em modo WAL (`node:sqlite`) com transações atômicas `BEGIN IMMEDIATE`, eliminando race conditions e garantindo zero double-spend em reservas.
 
 Ao submeter o repositório a uma auditoria forense detalhada de arquitetura e concorrência, o maior aprendizado foi enxergar com clareza os trade-offs:
-Quando você prescinde de um SGBD transacional, você compreende na prática por que transações ACID, locks imediatos e isolamento de escrita (WAL) existem no mundo real.
+Quando você constrói a partir dos primeiros princípios, você compreende na prática por que transações ACID, locks imediatos e isolamento de escrita (WAL) existem no mundo real.
 
 O projeto foi formalizado academicamente em formato de artigo técnico (padrão SBC/IEEE) e com registros de decisões de arquitetura (ADRs).
 
 O repositório completo com a documentação pericial está aberto no meu GitHub:
-👉 https://github.com/kazuhirokamim/FitGestao
+👉 https://github.com/kazuhirokamim/FitGesty
 
 Qual foi o projeto em que você mais aprendeu sobre os fundamentos ao abrir mão de frameworks prontos? Vamos conversar nos comentários! 👇
 
@@ -43,7 +43,7 @@ Qual foi o projeto em que você mais aprendeu sobre os fundamentos ao abrir mão
 
 ## 🛡️ CHECKLIST FORENSE DE SANITIZAÇÃO PRÉ-PUSH
 
-Antes de realizar o `git push` para o repositório público `github.com/kazuhirokamim/FitGestao`, execute o protocolo de três camadas de proteção contra vazamento de dados:
+Antes de realizar o `git push` para o repositório público `github.com/kazuhirokamim/FitGesty`, execute o protocolo de três camadas de proteção contra vazamento de dados:
 
 ### 1. Auditoria de Dados Sensíveis e PIIs (LGPD & Anonimização)
 * [x] **CPFs e Documentos Oficiais:** Varredura no código confirmou **zero instâncias de CPFs, RGs ou dados fiscais reais**.
@@ -109,7 +109,7 @@ Caso o projeto evolua para aceitar portas e segredos configuráveis via ambiente
 
 ```bash
 # ==============================================================================
-# FitGestão — Configurações de Ambiente (Template)
+# FitGesty — Configurações de Ambiente (Template)
 # ==============================================================================
 
 # Porta do Servidor HTTP (Padrão: 3000)

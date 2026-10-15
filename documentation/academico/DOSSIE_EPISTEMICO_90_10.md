@@ -1,9 +1,9 @@
 # 🪐 DOSSIÊ EPISTÊMICO 90/10 & ADRs RETROATIVOS
-## Sistema FitGestão — Destilação por Primeiros Princípios e Arquitetura de Decisão
+## Sistema FitGesty — Destilação por Primeiros Princípios e Arquitetura de Decisão
 
 **Destilação Epistêmica:** Noesis Epistemic Miner & Architecture Maestro  
 **Formato de Registro:** Padrão MADR 4.0 (Markdown Architectural Decision Records)  
-**Projeto:** FitGestão (DAC 5º Semestre TADS / UCDB)  
+**Projeto:** FitGesty (DAC 5º Semestre TADS / UCDB)  
 **Autor:** Kazuhiro Kamimura (`github.com/kazuhirokamim`)  
 
 ---
@@ -12,7 +12,7 @@
 
 Na engenharia de software de alta densidade, a **Regra 90/10** estabelece que $90\%$ do comportamento emergente e do valor de um sistema derivam de apenas $10\%$ de invariantes atômicos e axiomas fundamentais de domínio. Todo o restante é infraestrutura de transporte, serialização e renderização.
 
-No sistema **FitGestão**, esses 10% são formados por cinco invariantes matemáticos e de integridade:
+No sistema **FitGesty**, esses 10% são formados por cinco invariantes matemáticos e de integridade:
 
 ### Axioma 1: Princípio da Não-Vacuidade da Identidade
 $$\forall x \in \text{Entities}, \quad \text{id}(x) \in \text{UUIDv4} \quad \land \quad \text{createdAt}(x) \in \text{ISO8601}$$

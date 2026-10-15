@@ -15,7 +15,7 @@ Data: 2026-10-15
 - Não implementar suporte a bancos de dados externos remotos como PostgreSQL ou MySQL.
 
 ## Contexto e Problema
-O sistema FitGestão opera como um protótipo acadêmico em Node.js puro sem dependências externas. A auditoria forense identificou limitações críticas:
+O sistema FitGesty opera como um protótipo acadêmico em Node.js puro sem dependências externas. A auditoria forense identificou limitações críticas:
 1. Persistência em arquivo plano `db.json` com `fs.writeFileSync` síncrono e risco de perda de dados.
 2. Race condition (double-spend) na reserva de vagas de salas.
 3. Vulnerabilidade de Stored XSS por concatenação via `.innerHTML +=` no frontend.
@@ -94,7 +94,7 @@ O sistema FitGestão opera como um protótipo acadêmico em Node.js puro sem dep
 
 ## 🛡️ Critérios de Aceite (Definition of Done)
 * [ ] Zero pacotes npm instalados (`dependencies` e `devDependencies` vazios).
-* [ ] Banco de dados operando em `backend/fitgestao.sqlite` em modo WAL com integridade transacional.
+* [ ] Banco de dados operando em `backend/fitgesty.sqlite` em modo WAL com integridade transacional.
 * [ ] 100% dos testes unitários passando em `node --test` com cobertura $\ge 80\%$.
 * [ ] Zero vulnerabilidades de Stored XSS nas páginas HTML.
 * [ ] Concorrência protegida em reserva de salas com rollback/erro caso não haja vagas.

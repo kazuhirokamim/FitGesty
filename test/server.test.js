@@ -7,7 +7,7 @@ const http = require('node:http');
 // Configuração de ambiente de teste isolado
 process.env.NODE_ENV = 'test';
 process.env.PORT = '3001';
-const TEST_DB = path.join(__dirname, 'test_fitgestao.sqlite');
+const TEST_DB = path.join(__dirname, 'test_fitgesty.sqlite');
 process.env.SQLITE_DB_PATH = TEST_DB;
 
 const db = require('../backend/db');
@@ -50,7 +50,7 @@ function request(method, urlPath, body = null, headers = {}) {
   });
 }
 
-describe('FitGestão V1.5 — Suíte TDD de Hardening e Concorrência (Tear + Noesis + Hermes)', () => {
+describe('FitGesty V1.5 — Suíte TDD de Hardening e Concorrência (Tear + Noesis + Hermes)', () => {
   let httpServer;
   let adminToken;
 
@@ -365,7 +365,7 @@ describe('FitGestão V1.5 — Suíte TDD de Hardening e Concorrência (Tear + No
     test('[Happy Path] Servidor deve atender arquivos estáticos e mapear / para login.html', async () => {
       const resRoot = await request('GET', '/');
       assert.equal(resRoot.status, 200);
-      assert.match(resRoot.body, /FitGestão/i);
+      assert.match(resRoot.body, /FitGesty/i);
 
       const resCss = await request('GET', '/styles.css');
       assert.equal(resCss.status, 200);

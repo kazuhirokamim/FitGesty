@@ -1,6 +1,6 @@
 /*
   =============================================================================
-  FitGestão — Backend Nativo V1.5 (Zero-Dependency)
+  FitGesty — Backend Nativo V1.5 (Zero-Dependency)
   Integrado a SQLite Relacional (node:sqlite WAL), JWT Nativo e Transações ACID.
   =============================================================================
 */
@@ -187,7 +187,7 @@ async function handleApi(req, res, url) {
 
   // Rota: Status de integridade
   if (pathname === '/api/health') {
-    return send(res, STATUS.OK, { status: 'online', app: 'FitGestão', engine: 'SQLite-WAL', timestamp: new Date().toISOString() });
+    return send(res, STATUS.OK, { status: 'online', app: 'FitGesty', engine: 'SQLite-WAL', timestamp: new Date().toISOString() });
   }
 
   // Rota: Estatísticas Consolidadas
@@ -332,7 +332,7 @@ function start(port = PORT) {
   db.getDb();
   return server.listen(port, () => {
     if (process.env.NODE_ENV !== 'test') {
-      console.log(`FitGestão online em: http://localhost:${port}`);
+      console.log(`FitGesty online em: http://localhost:${port}`);
     }
   });
 }

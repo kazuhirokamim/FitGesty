@@ -3,7 +3,7 @@
 
 ---
 
-### **Arquitetura Zero-Dependency em Aplicações Web Corporativas: Um Estudo de Caso sobre Desacoplamento, Acessibilidade e Limites Transacionais no Sistema FitGestão**
+### **Arquitetura Zero-Dependency em Aplicações Web Corporativas: Um Estudo de Caso sobre Desacoplamento, Acessibilidade e Limites Transacionais no Sistema FitGesty**
 
 **Autor:** Kazuhiro Kamimura  
 **Afiliação:** Curso de Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) — Universidade Católica Dom Bosco (UCDB)  
@@ -14,7 +14,7 @@
 
 ### **RESUMO**
 
-O ecossistema contemporâneo de desenvolvimento web em JavaScript caracteriza-se por uma profunda dependência de *frameworks* de alto nível e árvores massivas de módulos de terceiros (*node_modules*), frequentemente introduzindo vulnerabilidades de cadeia de suprimentos (*supply chain attacks*), consumo inflacionado de memória e sobrecarga cognitiva. Este artigo investiga a viabilidade, eficácia e os *trade-offs* de projetar uma aplicação corporativa completa utilizando estritamente a biblioteca padrão do Node.js e tecnologias fundamentais da web (HTML5, CSS3 e Vanilla JavaScript). O objeto empírico de análise é o sistema **FitGestão**, uma plataforma de gerenciamento operacional para centros esportivos e academias com controle de matrículas, delegação de tarefas, gestão de recursos físicos e comunicação interna. Apresentam-se os padrões arquiteturais aplicados, a implementação de diretrizes de acessibilidade digital (WCAG 2.1 AA), a modelagem de um motor declarativo de validação de domínio em memória e a avaliação formal da complexidade assintótica $O(n)$ do subsistema de persistência em arquivo plano serializado em JSON. Discutem-se as fronteiras de escalabilidade e as limitações inerentes de concorrência e atomicidade $ACID$ sob a ausência de um SGBD transacional.
+O ecossistema contemporâneo de desenvolvimento web em JavaScript caracteriza-se por uma profunda dependência de *frameworks* de alto nível e árvores massivas de módulos de terceiros (*node_modules*), frequentemente introduzindo vulnerabilidades de cadeia de suprimentos (*supply chain attacks*), consumo inflacionado de memória e sobrecarga cognitiva. Este artigo investiga a viabilidade, eficácia e os *trade-offs* de projetar uma aplicação corporativa completa utilizando estritamente a biblioteca padrão do Node.js e tecnologias fundamentais da web (HTML5, CSS3 e Vanilla JavaScript). O objeto empírico de análise é o sistema **FitGesty**, uma plataforma de gerenciamento operacional para centros esportivos e academias com controle de matrículas, delegação de tarefas, gestão de recursos físicos e comunicação interna. Apresentam-se os padrões arquiteturais aplicados, a implementação de diretrizes de acessibilidade digital (WCAG 2.1 AA), a modelagem de um motor declarativo de validação de domínio em memória e a avaliação formal da complexidade assintótica $O(n)$ do subsistema de persistência em arquivo plano serializado em JSON. Discutem-se as fronteiras de escalabilidade e as limitações inerentes de concorrência e atomicidade $ACID$ sob a ausência de um SGBD transacional.
 
 **Palavras-chave:** Zero-Dependency Architecture; Node.js Nativo; Vanilla JavaScript; Acessibilidade na Web (WCAG); Concorrência e ACID; Engenharia de Software.
 
@@ -22,7 +22,7 @@ O ecossistema contemporâneo de desenvolvimento web em JavaScript caracteriza-se
 
 ### **ABSTRACT**
 
-The modern JavaScript web development ecosystem is heavily reliant on high-level frameworks and massive third-party dependency trees (*node_modules*), frequently introducing supply-chain security vulnerabilities, bloated memory consumption, and accidental complexity. This paper examines the feasibility, performance, and engineering trade-offs of designing a full-stack corporate web application solely utilizing the Node.js standard library and core web primitives (HTML5, CSS3, and Vanilla JavaScript). The empirical artifact evaluated is **FitGestão**, an enterprise operational management platform for fitness centers encompassing membership tracking, task scheduling, physical resource governance, and corporate communications. We detail the underlying architectural patterns, accessibility implementations adhering to WCAG 2.1 AA standards, an in-memory declarative domain validation engine, and an asymptotic time-complexity analysis of its flat-file JSON persistence layer. Finally, we explore the scalability boundaries, concurrency hazards, and $ACID$ transaction limitations in the absence of a transactional database management system.
+The modern JavaScript web development ecosystem is heavily reliant on high-level frameworks and massive third-party dependency trees (*node_modules*), frequently introducing supply-chain security vulnerabilities, bloated memory consumption, and accidental complexity. This paper examines the feasibility, performance, and engineering trade-offs of designing a full-stack corporate web application solely utilizing the Node.js standard library and core web primitives (HTML5, CSS3, and Vanilla JavaScript). The empirical artifact evaluated is **FitGesty**, an enterprise operational management platform for fitness centers encompassing membership tracking, task scheduling, physical resource governance, and corporate communications. We detail the underlying architectural patterns, accessibility implementations adhering to WCAG 2.1 AA standards, an in-memory declarative domain validation engine, and an asymptotic time-complexity analysis of its flat-file JSON persistence layer. Finally, we explore the scalability boundaries, concurrency hazards, and $ACID$ transaction limitations in the absence of a transactional database management system.
 
 **Keywords:** Zero-Dependency Architecture; Native Node.js; Vanilla JavaScript; Web Accessibility (WCAG); Concurrency and ACID; Software Engineering.
 
@@ -37,13 +37,13 @@ Paralelamente, pequenas e médias organizações — tais como academias, estúd
 Diante deste cenário, formulou-se a seguinte questão de pesquisa de engenharia:
 > *"É viável construir um sistema corporativo completo, performático, manutenível e acessível sem instalar uma única dependência externa de terceiros, recorrendo unicamente às primitivas fundamentais do Node.js e da plataforma Web?"*
 
-O projeto **FitGestão** foi concebido e implementado no âmbito da disciplina de Desenvolvimento de Aplicações Corporativas (DAC) do curso de TADS da UCDB para responder a essa hipótese, demonstrando que o domínio aprofundado dos primeiros princípios da computação supera a complacência do uso indiscriminado de bibliotecas.
+O projeto **FitGesty** foi concebido e implementado no âmbito da disciplina de Desenvolvimento de Aplicações Corporativas (DAC) do curso de TADS da UCDB para responder a essa hipótese, demonstrando que o domínio aprofundado dos primeiros princípios da computação supera a complacência do uso indiscriminado de bibliotecas.
 
 ---
 
 ### 2. ARQUITETURA DA SOLUÇÃO & ENGENHARIA DE SISTEMAS
 
-A arquitetura do FitGestão adota o padrão cliente-servidor monolítico desacoplado, onde o processo do Node.js desempenha o papel duplo de servidor de ativos estáticos de alta fidelidade e provedor de API RESTful.
+A arquitetura do FitGesty adota o padrão cliente-servidor monolítico desacoplado, onde o processo do Node.js desempenha o papel duplo de servidor de ativos estáticos de alta fidelidade e provedor de API RESTful.
 
 #### 2.1. Diagrama de Contêineres (C4 Model)
 
@@ -149,7 +149,7 @@ A camada visual foi concebida sob o paradigma da inclusão universal:
 
 #### 4.1. Complexidade Assintótica de Tempo e Espaço
 
-| Operação | Implementação no FitGestão | Complexidade de Tempo | Complexidade de Espaço | Gargalo Identificado |
+| Operação | Implementação no FitGesty | Complexidade de Tempo | Complexidade de Espaço | Gargalo Identificado |
 | :--- | :--- | :--- | :--- | :--- |
 | **Buscar Todos** | `db[name]` (Leitura de Array) | $O(1)$ após parse | $O(N)$ em memória | Serialização JSON a cada I/O |
 | **Filtrar Registros** | `filterItems` com substring | $O(N \cdot M)$ | $O(K)$ itens filtrados | `JSON.stringify(item)` no loop |
@@ -174,7 +174,7 @@ Ambas as threads autorizam a reserva da mesma vaga física. O sistema comporta-s
 
 ### 5. CONSIDERAÇÕES FINAIS & TRABALHOS FUTUROS
 
-O projeto **FitGestão** demonstra conclusivamente que a engenharia de software fundamentada em princípios sólidos permite a criação de soluções corporativas ricas, acessíveis e elegantes sem qualquer dependência de pacotes externos. 
+O projeto **FitGesty** demonstra conclusivamente que a engenharia de software fundamentada em princípios sólidos permite a criação de soluções corporativas ricas, acessíveis e elegantes sem qualquer dependência de pacotes externos. 
 
 Como trabalhos futuros para elevar o sistema ao nível de produto de missão crítica, destacam-se:
 1. **Adoção do SQLite Embutido:** Substituir a camada de arquivos planos por SQLite através do módulo nativo `node:sqlite`, obtendo transações $ACID$ completas com modo WAL (*Write-Ahead Logging*).
