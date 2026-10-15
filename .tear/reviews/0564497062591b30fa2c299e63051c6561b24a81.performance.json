@@ -1,0 +1,21 @@
+{
+  "sha": "0564497062591b30fa2c299e63051c6561b24a81",
+  "branch": "dev",
+  "lane": "performance",
+  "base": "dev",
+  "pass": true,
+  "verdict": "PASS",
+  "critical": 0,
+  "major": 0,
+  "minor": 0,
+  "reviewer": "tear-performance",
+  "reviewer_agent": "tear-performance",
+  "author": "kazuhirokamim@gmail.com",
+  "notes": "",
+  "nonce": null,
+  "signature": null,
+  "repro": null,
+  "evidence": null,
+  "contextHash": "fff34fe949bb931ad215429accdd4b38b390b4760eb3eb719dc2a8714bce5b95",
+  "reviewed_at": "2026-10-15T08:12:04.290Z"
+}

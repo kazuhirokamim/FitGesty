@@ -1,0 +1,21 @@
+{
+  "sha": "0564497062591b30fa2c299e63051c6561b24a81",
+  "branch": "dev",
+  "lane": "security",
+  "base": "dev",
+  "pass": true,
+  "verdict": "PASS",
+  "critical": 0,
+  "major": 0,
+  "minor": 0,
+  "reviewer": "tear-security",
+  "reviewer_agent": "tear-security",
+  "author": "kazuhirokamim@gmail.com",
+  "notes": "",
+  "nonce": null,
+  "signature": null,
+  "repro": null,
+  "evidence": null,
+  "contextHash": "5245fa93c93cc2a5b53a7ac4c1271491225375fb31e4c30eed63e9fc333c5792",
+  "reviewed_at": "2026-10-15T08:11:51.330Z"
+}

@@ -1,0 +1,21 @@
+{
+  "sha": "0564497062591b30fa2c299e63051c6561b24a81",
+  "branch": "dev",
+  "lane": "code",
+  "base": "dev",
+  "pass": true,
+  "verdict": "GOLDEN",
+  "critical": 0,
+  "major": 0,
+  "minor": 0,
+  "reviewer": "tear-code-reviewer",
+  "reviewer_agent": "tear-code-reviewer",
+  "author": "kazuhirokamim@gmail.com",
+  "notes": "",
+  "nonce": null,
+  "signature": null,
+  "repro": null,
+  "evidence": null,
+  "contextHash": "2e057e3007a6250d794fa24971836b2b7382b2d5919a1c200909594e9fe0335b",
+  "reviewed_at": "2026-10-15T08:11:40.121Z"
+}

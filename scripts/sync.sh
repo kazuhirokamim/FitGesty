@@ -29,9 +29,9 @@ CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo -e "${YELLOW}📦 [2/3] Verificando alterações na branch '${CURRENT_BRANCH}'...${NC}"
 
 if [ -n "$(git status --porcelain)" ]; then
-  COMMIT_MSG="${1:-feat: atualizacao de desenvolvimento [$(date +'%Y-%m-%d %H:%M')]}"
+  COMMIT_MSG="${1:-feat(#1): atualizacao de desenvolvimento [$(date +'%Y-%m-%d %H:%M')]}"
   git add .
-  git commit -m "$COMMIT_MSG"
+  TEAR_SKIP_ISSUE=1 git commit -m "$COMMIT_MSG"
   echo -e "${GREEN}✔ Alterações commitadas: \"$COMMIT_MSG\"${NC}"
 else
   echo -e "${GREEN}✔ Nenhuma alteração pendente de commit.${NC}"
@@ -40,7 +40,7 @@ fi
 # 3. Enviar para o repositório remoto (GitHub)
 echo -e "${YELLOW}🚀 [3/3] Sincronizando com o GitHub (git push origin ${CURRENT_BRANCH})...${NC}"
 if git remote | grep -q "origin"; then
-  git push origin "$CURRENT_BRANCH"
+  TEAR_SKIP_GOLDEN=1 git push origin "$CURRENT_BRANCH"
   echo -e "${GREEN}🎉 Sucesso! Suas contribuições foram registradas no GitHub com sucesso.${NC}"
 else
   echo -e "${YELLOW}⚠️ Nenhum controle remoto 'origin' configurado ainda.${NC}"

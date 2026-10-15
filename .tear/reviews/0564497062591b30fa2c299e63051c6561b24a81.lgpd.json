@@ -1,0 +1,21 @@
+{
+  "sha": "0564497062591b30fa2c299e63051c6561b24a81",
+  "branch": "dev",
+  "lane": "lgpd",
+  "base": "dev",
+  "pass": true,
+  "verdict": "PASS",
+  "critical": 0,
+  "major": 0,
+  "minor": 0,
+  "reviewer": "tear-lgpd",
+  "reviewer_agent": "tear-security",
+  "author": "kazuhirokamim@gmail.com",
+  "notes": "",
+  "nonce": null,
+  "signature": null,
+  "repro": null,
+  "evidence": null,
+  "contextHash": "742cfed4602920a4d4bf118db6bdf533b4026a15d0af99e82afc31060b11d87d",
+  "reviewed_at": "2026-10-15T08:12:03.310Z"
+}
